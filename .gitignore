@@ -1,0 +1,55 @@
+# ==============================================================================
+# APEX PERFORMANCE MONOREPO — ROOT .gitignore
+# ==============================================================================
+
+# 1. Dependency Directories (Never commit node_modules in client or server)
+node_modules/
+**/node_modules/
+.pnp
+.pnp.js
+
+# 2. Environment Variables & Secrets (CRITICAL SECURITY RULE)
+.env
+.env.*
+**/.env
+**/.env.*
+
+# Explicitly allow safe template files to be tracked by Git
+!.env.example
+!**/.env.example
+
+# 3. Production Build & Bundler Outputs (Vite / Node)
+dist/
+**/dist/
+build/
+**/build/
+.vite/
+**/.vite/
+
+# 4. Logs & Runtime Diagnostic Files
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# 5. Operating System & Editor Metadata
+.DS_Store
+**/.DS_Store
+Thumbs.db
+**/Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# 6. Testing & Coverage Artifacts
+coverage/
+**/coverage/
+.nyc_output/
