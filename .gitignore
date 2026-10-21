@@ -53,3 +53,5 @@ Thumbs.db
 coverage/
 **/coverage/
 .nyc_output/
+
+repomix-output.xml
