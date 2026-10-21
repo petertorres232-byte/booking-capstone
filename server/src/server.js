@@ -11,6 +11,7 @@ import mongoose from 'mongoose';
 import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 import serviceRoutes from './routes/serviceRoutes.js';
+import bookingRoutes from './routes/bookingRoutes.js';
 import { apiLimiter } from './middleware/rateLimitMiddleware.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
@@ -57,6 +58,7 @@ app.get('/api/health', (req, res) => {
 // 7. Mount Modular API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/services', serviceRoutes);
+app.use('/api/bookings', bookingRoutes);
 
 // 8. Centralized 404 & Global Error Handling Middleware (MUST be mounted last)
 app.use(notFound);
