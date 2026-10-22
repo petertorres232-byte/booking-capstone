@@ -12,7 +12,7 @@ const AI_UNAVAILABLE_STATUS_CODES = [502, 503, 504];
 /**
  * @desc    Recommend real catalog services for a free-text fitness goal
  * @route   POST /api/ai/recommend-service
- * @access  Private (route-level protect + aiLimiter, wired in the next step)
+ * @access  Public (guests allowed; per-IP aiLimiter applied at the route level)
  * @body    { "message": "string, 5-500 characters" }
  */
 export const recommendService = asyncHandler(async (req, res) => {
