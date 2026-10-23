@@ -1,10 +1,60 @@
 // ==============================================================================
-// APEX PERFORMANCE — APP ROOT (TEMPORARY ROUTER SHELL)
+// APEX PERFORMANCE — APP ROOT (TEMPORARY ROUTER SHELL + AUTH DEBUG PANEL)
 // File Path: client/src/App.jsx
-// Replaced step by step: Navbar/Layout (Step 28), real pages (Steps 29-35)
+// The debug panel is TEMPORARY and is removed in Step 28 (real Navbar/Layout).
 // ==============================================================================
 
+import { useState } from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext.jsx';
+
+// TEMPORARY: shows live session state so we can test AuthContext before building real forms
+function AuthDebugPanel() {
+  const { user, isLoading, isAuthenticated, register, logout } = useAuth();
+  const [message, setMessage] = useState('');
+  const [busy, setBusy] = useState(false);
+
+  const handleCreateTestUser = async () => {
+    setBusy(true);
+    setMessage('');
+    try {
+      await register('Debug User', `debug.${Date.now()}@example.com`, 'TestPass123');
+    } catch (error) {
+      setMessage(error.message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <section className="card" aria-live="polite">
+      <h2>Auth debug panel (temporary)</h2>
+
+      {isLoading && (
+        <p>
+          <span className="spinner" aria-hidden="true" /> Checking session...
+        </p>
+      )}
+
+      {!isLoading && isAuthenticated && (
+        <p>
+          Logged in as <strong>{user.email}</strong> (role: {user.role})
+        </p>
+      )}
+
+      {!isLoading && !isAuthenticated && <p>Logged out</p>}
+
+      {message && <div className="alert alert-error">{message}</div>}
+
+      <button type="button" className="btn" onClick={handleCreateTestUser} disabled={busy || isLoading || isAuthenticated}>
+        {busy ? 'Creating...' : 'Create throwaway user and log in'}
+      </button>{' '}
+      <button type="button" className="btn btn-secondary" onClick={logout} disabled={isLoading || !isAuthenticated}>
+        Log out
+      </button>
+    </section>
+  );
+}
 
 function HomePlaceholder() {
   return (
@@ -43,18 +93,21 @@ function NotFoundPlaceholder() {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <nav className="container page-title" aria-label="Main navigation">
-        <Link to="/">Home</Link> | <Link to="/services">Services</Link>
-      </nav>
+    <AuthProvider>
+      <BrowserRouter>
+        <nav className="container page-title" aria-label="Main navigation">
+          <Link to="/">Home</Link> | <Link to="/services">Services</Link>
+        </nav>
 
-      <main className="container page">
-        <Routes>
-          <Route path="/" element={<HomePlaceholder />} />
-          <Route path="/services" element={<ServicesPlaceholder />} />
-          <Route path="*" element={<NotFoundPlaceholder />} />
-        </Routes>
-      </main>
-    </BrowserRouter>
+        <main className="container page">
+          <AuthDebugPanel />
+          <Routes>
+            <Route path="/" element={<HomePlaceholder />} />
+            <Route path="/services" element={<ServicesPlaceholder />} />
+            <Route path="*" element={<NotFoundPlaceholder />} />
+          </Routes>
+        </main>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
