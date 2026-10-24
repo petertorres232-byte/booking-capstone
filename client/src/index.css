@@ -510,3 +510,196 @@ button.nav-link {
     width: auto;
   }
 }
+/* ==============================================================================
+   13. SERVICE CATALOG & DETAIL (added in Step 30)
+   ============================================================================== */
+
+.page-header {
+  margin-bottom: var(--space-5);
+}
+
+.page-header p {
+  max-width: 60ch;
+  margin-bottom: 0;
+}
+
+/* Category filter chips (toggle buttons) */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+}
+
+.filter-chip {
+  min-height: 44px;
+  padding: 0.5rem 1rem;
+  font: inherit;
+  font-weight: 600;
+  color: var(--color-dark);
+  background: var(--color-surface);
+  border: 2px solid var(--color-border-strong);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.filter-chip:hover {
+  border-color: var(--color-dark);
+}
+
+.filter-chip[aria-pressed='true'] {
+  color: #ffffff;
+  background: var(--color-dark);
+  border-color: var(--color-dark);
+}
+
+/* Category tags: neutral by default, colored per known category */
+.category-tag {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 0.15rem 0.7rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--color-dark);
+  background: var(--color-border);
+  border-radius: 999px;
+}
+
+.category-strength {
+  color: #7c2d12;
+  background: #ffedd5;
+}
+
+.category-cardio {
+  color: #9f1239;
+  background: #ffe4e6;
+}
+
+.category-recovery {
+  color: #134e4a;
+  background: #ccfbf1;
+}
+
+.category-mobility {
+  color: #1e3a8a;
+  background: #dbeafe;
+}
+
+.category-assessment {
+  color: #581c87;
+  background: #f3e8ff;
+}
+
+/* Service card */
+.service-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.service-card:hover {
+  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-md);
+}
+
+.service-card__title {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.service-card__title a {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.service-card__title a:hover {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.service-card__description {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.service-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-4);
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+.service-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-top: auto;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+}
+
+.price {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+/* Service detail page */
+.back-link {
+  display: inline-block;
+  margin-bottom: var(--space-4);
+}
+
+.detail-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.detail-header h1,
+.detail-header h2 {
+  margin: 0;
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+  margin: var(--space-4) 0;
+}
+
+.facts > div {
+  padding: var(--space-3);
+  background: var(--color-bg);
+  border-radius: var(--radius-sm);
+}
+
+.facts dt {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+.facts dd {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+@media (min-width: 768px) {
+  .facts {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .detail-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
