@@ -7,32 +7,12 @@ import { useState } from 'react';
 import { Link, Navigate, useLocation } from 'react-router-dom';
 import FormField from '../components/FormField.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
+import { getSafeDestination } from '../utils/getSafeDestination.js';
 
 // Deliberately loose: the server applies the authoritative email rules
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const EMPTY_VALUES = { name: '', email: '', password: '', confirmPassword: '' };
-
-/**
- * Helper: where to go after a successful sign-up.
- * Accepts only in-app paths ("/something"), never "//host" or full URLs (open-redirect protection).
- */
-const getSafeDestination = (location) => {
-  const from = location.state?.from;
-  const path = from?.pathname;
-
-  if (
-    typeof path === 'string' &&
-    path.startsWith('/') &&
-    !path.startsWith('//') &&
-    path !== '/login' &&
-    path !== '/register'
-  ) {
-    return `${path}${typeof from.search === 'string' ? from.search : ''}`;
-  }
-
-  return '/dashboard';
-};
 
 /**
  * Helper: client-side validation (convenience only; the server validates again).
