@@ -1,14 +1,16 @@
 // ==============================================================================
 // APEX PERFORMANCE — APP ROOT (PROVIDERS + ROUTES)
 // File Path: client/src/App.jsx
-// Placeholder pages below are replaced by real files in client/src/pages/
-// during Steps 29-35.
+// Remaining placeholders (Home, Services, Dashboard) are replaced by real
+// files in client/src/pages/ during Steps 30-35.
 // ==============================================================================
 
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext.jsx';
 import Layout from './components/Layout.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
+import Login from './pages/Login.jsx';
+import Register from './pages/Register.jsx';
 
 function HomePlaceholder() {
   return (
@@ -27,24 +29,6 @@ function ServicesPlaceholder() {
     <section className="card">
       <h1>Services</h1>
       <p className="text-muted">The live service catalog will load here from the API.</p>
-    </section>
-  );
-}
-
-function LoginPlaceholder() {
-  return (
-    <section className="card">
-      <h1>Log in</h1>
-      <p className="text-muted">The login form arrives in Step 29.</p>
-    </section>
-  );
-}
-
-function RegisterPlaceholder() {
-  return (
-    <section className="card">
-      <h1>Register</h1>
-      <p className="text-muted">The registration form arrives in Step 29.</p>
     </section>
   );
 }
@@ -78,8 +62,8 @@ export default function App() {
           <Route element={<Layout />}>
             <Route index element={<HomePlaceholder />} />
             <Route path="services" element={<ServicesPlaceholder />} />
-            <Route path="login" element={<LoginPlaceholder />} />
-            <Route path="register" element={<RegisterPlaceholder />} />
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
             <Route
               path="dashboard"
               element={
