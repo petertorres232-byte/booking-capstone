@@ -5,6 +5,10 @@
 
 import mongoose from 'mongoose';
 
+// Linear-time email check (no nested repetition, so it cannot be abused for ReDoS):
+// local part, "@", one or more dot-free domain labels, and a final label of 2+ characters
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@.]+(\.[^\s@.]+)*\.[^\s@.]{2,}$/;
+
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -20,10 +24,8 @@ const userSchema = new mongoose.Schema(
       unique: true,
       lowercase: true,
       trim: true,
-      match: [
-        /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-        'Please provide a valid email address'
-      ]
+      maxlength: [254, 'Email cannot exceed 254 characters'],
+      match: [EMAIL_PATTERN, 'Please provide a valid email address']
     },
     passwordHash: {
       type: String,
