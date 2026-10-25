@@ -6,13 +6,7 @@
 // ==============================================================================
 
 import { Link } from 'react-router-dom';
-import { formatDuration, formatPrice, getServiceId } from '../utils/serviceHelpers.js';
-
-/**
- * Helper: build a safe CSS class from a category name ("Strength" -> "category-strength").
- */
-const toCategoryClass = (category) =>
-  `category-${String(category ?? '').toLowerCase().replace(/[^a-z0-9]/g, '')}`;
+import { formatDuration, formatPrice, getCategoryClass, getServiceId } from '../utils/serviceHelpers.js';
 
 export default function ServiceCard({ service, headingLevel = 2, children }) {
   if (!service) {
@@ -26,7 +20,7 @@ export default function ServiceCard({ service, headingLevel = 2, children }) {
 
   return (
     <article className="card service-card">
-      <span className={`category-tag ${toCategoryClass(service.category)}`}>{service.category || 'General'}</span>
+      <span className={`category-tag ${getCategoryClass(service.category)}`}>{service.category || 'General'}</span>
 
       <Heading className="service-card__title">
         {detailPath ? <Link to={detailPath}>{serviceName}</Link> : serviceName}
