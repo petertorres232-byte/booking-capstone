@@ -6,14 +6,30 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { ChevronDown } from 'lucide-react';
 import BookingActions from '../components/BookingActions.jsx';
 import BookingCard from '../components/BookingCard.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
 import { api } from '../services/api.js';
+import '../styles/dashboard.css';
 
 const toTime = (value) => {
   const time = new Date(value).getTime();
   return Number.isNaN(time) ? 0 : time;
+};
+
+const formatShortDate = (value) => {
+  const date = new Date(value);
+  return Number.isNaN(date.getTime())
+    ? ''
+    : date.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+};
+
+const formatShortTime = (value) => {
+  const date = new Date(value);
+  return Number.isNaN(date.getTime())
+    ? ''
+    : date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
 };
 
 /**
@@ -45,6 +61,7 @@ export default function Dashboard() {
   const [reloadCount, setReloadCount] = useState(0);
   const [result, setResult] = useState({ key: null, bookings: [], error: '', loadedAt: 0 });
   const [notice, setNotice] = useState('');
+  const [historyOpen, setHistoryOpen] = useState(true);
   const noticeRef = useRef(null);
 
   // Identifies one specific request; every reload creates a new key
@@ -116,16 +133,43 @@ export default function Dashboard() {
   }
 
   const { upcoming, history } = splitBookings(result.bookings, result.loadedAt);
+  const nextBooking = upcoming[0] ?? null;
+  const pastSessions = history.filter((booking) => booking.status !== 'cancelled').length;
+  const firstName = user?.name ? user.name.split(' ')[0] : '';
 
   return (
     <div>
-      <div className="page-header">
-        <h1>{user?.name ? `Welcome back, ${user.name}` : 'Your dashboard'}</h1>
-        <p className="text-muted">Manage your coaching and recovery appointments.</p>
+      <section className="dashboard-hero" aria-labelledby="dashboard-heading">
+        <div>
+          <h1 id="dashboard-heading">{firstName ? `Welcome back, ${firstName}` : 'Your dashboard'}</h1>
+          <p className="text-muted">Manage your coaching and recovery appointments.</p>
+        </div>
         <Link className="btn" to="/services">
           Book a service
         </Link>
-      </div>
+      </section>
+
+      <dl className="dashboard-stats">
+        <div className="dashboard-stat">
+          <dt>Upcoming</dt>
+          <dd>{upcoming.length}</dd>
+        </div>
+        <div className="dashboard-stat">
+          <dt>Next session</dt>
+          <dd>
+            {nextBooking ? formatShortDate(nextBooking.startTime) : 'None yet'}
+            <span className="dashboard-stat__sub">
+              {nextBooking
+                ? `${formatShortTime(nextBooking.startTime)} · ${nextBooking.service?.name ?? 'Appointment'}`
+                : 'Book a service to get started'}
+            </span>
+          </dd>
+        </div>
+        <div className="dashboard-stat">
+          <dt>Past sessions</dt>
+          <dd>{pastSessions}</dd>
+        </div>
+      </dl>
 
       {notice && (
         <div className="alert alert-success" role="status" tabIndex={-1} ref={noticeRef}>
@@ -133,7 +177,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      <section aria-labelledby="upcoming-heading">
+      <section className="dashboard-section" aria-labelledby="upcoming-heading">
         <h2 id="upcoming-heading">Upcoming appointments ({upcoming.length})</h2>
 
         {upcoming.length === 0 ? (
@@ -152,16 +196,31 @@ export default function Dashboard() {
         )}
       </section>
 
-      <section aria-labelledby="history-heading" style={{ marginTop: 'var(--space-6)' }}>
-        <h2 id="history-heading">History ({history.length})</h2>
+      <section className="dashboard-section" aria-labelledby="history-heading">
+        <details
+          className="history-panel"
+          open={historyOpen}
+          onToggle={(event) => setHistoryOpen(event.currentTarget.open)}
+        >
+          <summary className="history-summary">
+            <h2 id="history-heading">History ({history.length})</h2>
+            <ChevronDown className="history-chevron" size={24} aria-hidden="true" />
+          </summary>
 
-        {history.length === 0 ? (
-          <p className="text-muted">Past and cancelled appointments will appear here.</p>
-        ) : (
-          history.map((booking) => (
-            <BookingCard key={booking._id} booking={booking} isPast={toTime(booking.endTime) <= result.loadedAt} />
-          ))
-        )}
+          <div className="history-panel__content">
+            {history.length === 0 ? (
+              <p className="text-muted">Past and cancelled appointments will appear here.</p>
+            ) : (
+              history.map((booking) => (
+                <BookingCard
+                  key={booking._id}
+                  booking={booking}
+                  isPast={toTime(booking.endTime) <= result.loadedAt}
+                />
+              ))
+            )}
+          </div>
+        </details>
       </section>
     </div>
   );
