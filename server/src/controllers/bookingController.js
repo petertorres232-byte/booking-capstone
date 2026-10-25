@@ -7,13 +7,45 @@ import Booking from '../models/Booking.js';
 import Service from '../models/Service.js';
 import { ApiError, asyncHandler } from '../middleware/errorMiddleware.js';
 
+// A MongoDB ObjectId is exactly 24 hexadecimal characters
+const OBJECT_ID_PATTERN = /^[a-f0-9]{24}$/i;
+
+/**
+ * Helper: Require a plain 24-character hex string.
+ * Rejects objects/arrays (for example {"$ne": null}) so they can never be
+ * interpreted as MongoDB query operators.
+ */
+const requireObjectIdString = (value, fieldName) => {
+  if (typeof value !== 'string' || !OBJECT_ID_PATTERN.test(value)) {
+    throw new ApiError(400, `Invalid ${fieldName}. Please provide a valid ${fieldName}.`);
+  }
+  return value;
+};
+
+/**
+ * Helper: Notes must be plain text when provided. Returns a trimmed string.
+ */
+const parseNotes = (rawNotes) => {
+  if (rawNotes === undefined || rawNotes === null) {
+    return '';
+  }
+  if (typeof rawNotes !== 'string') {
+    throw new ApiError(400, 'Notes must be text');
+  }
+  return rawNotes.trim();
+};
+
 /**
  * Helper: Parse and validate a future appointment startTime
  * Returns a valid Date object or throws a 400 ApiError.
  */
 const parseFutureStartTime = (rawStartTime) => {
-  if (!rawStartTime) {
+  if (rawStartTime === undefined || rawStartTime === null || rawStartTime === '') {
     throw new ApiError(400, 'Please provide an appointment startTime');
+  }
+
+  if (typeof rawStartTime !== 'string') {
+    throw new ApiError(400, 'Invalid startTime date format. Please use ISO 8601 format.');
   }
 
   const parsedDate = new Date(rawStartTime);
@@ -60,15 +92,19 @@ const findOverlappingBooking = async ({
 export const createBooking = asyncHandler(async (req, res) => {
   const { serviceId, startTime, notes } = req.body;
 
-  if (!serviceId) {
+  if (serviceId === undefined || serviceId === null || serviceId === '') {
     throw new ApiError(400, 'Please provide a serviceId');
   }
+
+  // 0. Type-check every client-controlled value before it can reach a query
+  const safeServiceId = requireObjectIdString(serviceId, 'serviceId');
+  const safeNotes = parseNotes(notes);
 
   // 1. Validate future startTime
   const parsedStartTime = parseFutureStartTime(startTime);
 
   // 2. Verify target service exists and is active in MongoDB
-  const service = await Service.findById(serviceId);
+  const service = await Service.findById(safeServiceId);
   if (!service || !service.isActive) {
     throw new ApiError(404, 'Selected service was not found or is no longer active');
   }
@@ -100,7 +136,7 @@ export const createBooking = asyncHandler(async (req, res) => {
     status: 'confirmed',
     priceAtBooking: service.price,
     durationMinutes: service.durationMinutes,
-    notes: notes ? String(notes).trim() : ''
+    notes: safeNotes
   });
 
   // Populate service details for immediate UI confirmation rendering
@@ -142,8 +178,12 @@ export const updateBooking = asyncHandler(async (req, res) => {
     throw new ApiError(400, 'Please provide a new startTime or notes to update');
   }
 
+  // 0. Type-check client-controlled values before using them
+  const safeNotes = notes !== undefined ? parseNotes(notes) : undefined;
+  const bookingId = requireObjectIdString(req.params.id, 'booking id');
+
   // 1. Find existing booking
-  const booking = await Booking.findById(req.params.id);
+  const booking = await Booking.findById(bookingId);
   if (!booking) {
     throw new ApiError(404, 'Booking not found');
   }
@@ -186,8 +226,8 @@ export const updateBooking = asyncHandler(async (req, res) => {
   }
 
   // 5. If updating coaching/recovery notes
-  if (notes !== undefined) {
-    booking.notes = String(notes).trim();
+  if (safeNotes !== undefined) {
+    booking.notes = safeNotes;
   }
 
   await booking.save();
@@ -206,7 +246,9 @@ export const updateBooking = asyncHandler(async (req, res) => {
  * @access  Private (Strict Ownership Check)
  */
 export const cancelBooking = asyncHandler(async (req, res) => {
-  const booking = await Booking.findById(req.params.id);
+  const bookingId = requireObjectIdString(req.params.id, 'booking id');
+
+  const booking = await Booking.findById(bookingId);
 
   if (!booking) {
     throw new ApiError(404, 'Booking not found');
