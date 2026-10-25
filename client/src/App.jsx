@@ -1,8 +1,7 @@
 // ==============================================================================
 // APEX PERFORMANCE — APP ROOT (PROVIDERS + ROUTES)
 // File Path: client/src/App.jsx
-// Remaining placeholders (Home, Dashboard) are replaced by real files in
-// client/src/pages/ during Steps 32-35.
+// The only remaining placeholder is Home, replaced by a real page later.
 // ==============================================================================
 
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
@@ -14,6 +13,7 @@ import Register from './pages/Register.jsx';
 import Services from './pages/Services.jsx';
 import ServiceDetail from './pages/ServiceDetail.jsx';
 import BookService from './pages/BookService.jsx';
+import Dashboard from './pages/Dashboard.jsx';
 
 function HomePlaceholder() {
   return (
@@ -23,15 +23,6 @@ function HomePlaceholder() {
       <Link className="btn" to="/services">
         Browse services
       </Link>
-    </section>
-  );
-}
-
-function DashboardPlaceholder() {
-  return (
-    <section className="card">
-      <h1>Dashboard</h1>
-      <p className="text-muted">Your appointments will appear here in Step 32.</p>
     </section>
   );
 }
@@ -71,7 +62,7 @@ export default function App() {
               path="dashboard"
               element={
                 <ProtectedRoute>
-                  <DashboardPlaceholder />
+                  <Dashboard />
                 </ProtectedRoute>
               }
             />
