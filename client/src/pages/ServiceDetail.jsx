@@ -131,6 +131,11 @@ export default function ServiceDetail() {
           <dd>{service.coachName}</dd>
         </div>
       </dl>
+      <p>
+        <Link className="btn" to={`/book/${service._id ?? id}`}>
+          Book this service
+        </Link>
+      </p>
     </article>
   );
 }
