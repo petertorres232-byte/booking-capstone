@@ -29,6 +29,12 @@ if (process.env.NODE_ENV === 'production' && !process.env.CLIENT_ORIGIN) {
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// 2b. Behind a hosting proxy (Render), trust exactly ONE hop so req.ip is the real visitor.
+//     Not enabled locally, and never set to `true` (that would let clients spoof their IP).
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
+
 // 3. Connect to MongoDB Atlas Cloud Cluster
 connectDB();
 
