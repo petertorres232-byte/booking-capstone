@@ -1,0 +1,300 @@
+/* ==============================================================================
+   HOME PAGE STYLES
+   File Path: client/src/styles/home.css
+   ============================================================================== */
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: flex-end;
+  min-height: clamp(26rem, 72vh, 40rem);
+  color: #ffffff;
+  background: #0e1420;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.hero__image {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Dark gradient keeps white text readable on any photo, in both themes */
+.hero__shade {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    rgba(14, 20, 32, 0.35) 0%,
+    rgba(14, 20, 32, 0.88) 100%
+  );
+}
+
+.hero__content {
+  width: 100%;
+  padding: var(--space-7) clamp(1.25rem, 4vw, 3rem);
+}
+
+.hero h1 {
+  max-width: 14ch;
+  margin-bottom: var(--space-4);
+  font-size: clamp(3rem, 9vw, 5.5rem);
+  line-height: 0.98;
+  color: #ffffff;
+}
+
+.hero__lead {
+  max-width: 48ch;
+  margin-bottom: var(--space-5);
+  font-size: 1.2rem;
+  color: #e6eaf1;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+/* Outline button reads on the photo */
+.hero .btn-secondary {
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+.hero .btn-secondary:hover {
+  color: #0e1420;
+  background: #ffffff;
+}
+
+.hero :focus-visible {
+  outline-color: #ffffff;
+}
+
+@media (min-width: 768px) {
+  .hero__shade {
+    background: linear-gradient(
+      90deg,
+      rgba(14, 20, 32, 0.9) 0%,
+      rgba(14, 20, 32, 0.6) 55%,
+      rgba(14, 20, 32, 0.15) 100%
+    );
+  }
+
+  .hero {
+    align-items: center;
+  }
+}
+
+/* ---------- Sections below the hero ---------- */
+.home-section {
+  padding-top: var(--space-7);
+}
+
+.home-section__intro {
+  max-width: 56ch;
+  color: var(--color-muted);
+}
+
+/* ---------- How it works ---------- */
+.steps {
+  display: grid;
+  gap: var(--space-4);
+  margin: var(--space-5) 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+
+.step {
+  position: relative;
+  padding: var(--space-5);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  counter-increment: step;
+  transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+
+.step:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.step::before {
+  content: counter(step);
+  display: block;
+  margin-bottom: var(--space-2);
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--color-link);
+}
+
+.step h3 {
+  margin-bottom: var(--space-2);
+}
+
+.step p {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+@media (min-width: 768px) {
+  .steps {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ---------- Category photo tiles ---------- */
+.category-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  margin-top: var(--space-5);
+}
+
+.category-tile {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 3;
+  color: #ffffff;
+  text-decoration: none;
+  background: #0e1420;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+}
+
+.category-tile:hover {
+  color: #ffffff;
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.category-tile:focus-visible {
+  outline-offset: 3px;
+}
+
+.category-tile__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s var(--ease);
+}
+
+.category-tile:hover .category-tile__image,
+.category-tile:focus-visible .category-tile__image {
+  transform: scale(1.06);
+}
+
+/* Stronger at the bottom so the label is readable on light illustrations */
+.category-tile__shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(14, 20, 32, 0) 20%, rgba(14, 20, 32, 0.94) 100%);
+  transition: background 0.25s var(--ease);
+}
+
+.category-tile:hover .category-tile__shade {
+  background: linear-gradient(180deg, rgba(14, 20, 32, 0.25) 0%, rgba(14, 20, 32, 0.96) 100%);
+}
+
+.category-tile__body {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: var(--space-4);
+}
+
+.category-tile__body h3 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 var(--space-1);
+  font-size: 1.8rem;
+  color: #ffffff;
+}
+
+.category-tile__arrow {
+  flex-shrink: 0;
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity 0.25s var(--ease), transform 0.25s var(--ease);
+}
+
+.category-tile:hover .category-tile__arrow,
+.category-tile:focus-visible .category-tile__arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* On touch devices there is no hover, so keep the arrow visible */
+@media (hover: none) {
+  .category-tile__arrow {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.category-tile__body p {
+  margin: 0;
+  max-width: 34ch;
+  font-size: 0.98rem;
+  color: #f1f4f9;
+}
+
+@media (min-width: 768px) {
+  .category-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .category-tile:last-child {
+    grid-column: span 2;
+    aspect-ratio: 8 / 3;
+  }
+}
+
+@media (min-width: 1200px) {
+  .category-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .category-tile {
+    grid-column: span 2;
+  }
+
+  /* Second row: two wider tiles */
+  .category-tile:nth-child(4),
+  .category-tile:nth-child(5) {
+    grid-column: span 3;
+    aspect-ratio: 2 / 1;
+  }
+
+  .category-tile:last-child {
+    aspect-ratio: 2 / 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .step:hover,
+  .category-tile:hover {
+    transform: none;
+  }
+
+  .category-tile:hover .category-tile__image,
+  .category-tile:focus-visible .category-tile__image {
+    transform: none;
+  }
+}
