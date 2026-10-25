@@ -2,11 +2,13 @@
 // APEX PERFORMANCE — NAVBAR COMPONENT
 // File Path: client/src/components/Navbar.jsx
 // Links change with login state; includes accessible mobile menu toggle
+// and the light/dark theme toggle
 // ==============================================================================
 
 import { useEffect, useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
+import ThemeToggle from './ThemeToggle.jsx';
 
 export default function Navbar() {
   const { user, isLoading, isAuthenticated, logout } = useAuth();
@@ -87,6 +89,8 @@ export default function Navbar() {
               </NavLink>
             </>
           )}
+
+          <ThemeToggle />
         </nav>
       </div>
     </header>
