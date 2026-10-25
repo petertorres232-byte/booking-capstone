@@ -13,6 +13,7 @@ import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
 import Services from './pages/Services.jsx';
 import ServiceDetail from './pages/ServiceDetail.jsx';
+import BookService from './pages/BookService.jsx';
 
 function HomePlaceholder() {
   return (
@@ -58,6 +59,14 @@ export default function App() {
             <Route path="services/:id" element={<ServiceDetail />} />
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
+            <Route
+              path="book/:serviceId"
+              element={
+                <ProtectedRoute>
+                  <BookService />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="dashboard"
               element={
