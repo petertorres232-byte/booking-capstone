@@ -1,0 +1,106 @@
+/* ==============================================================================
+   SERVICE CARD (PHOTO VARIANT)
+   File Path: client/src/styles/service-card.css
+   ============================================================================== */
+
+/* The card itself no longer pads: the photo goes edge to edge, the body pads */
+.service-card.card {
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.service-card__media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  background: var(--color-border);
+  overflow: hidden;
+}
+
+.service-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  transition: transform 0.5s var(--ease);
+}
+
+.service-card:hover .service-card__image {
+  transform: scale(1.05);
+}
+
+/* Category tag sits on the photo */
+.service-card__media .category-tag {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+  box-shadow: var(--shadow-sm);
+}
+
+.service-card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+/* Description: 3 lines until expanded */
+.service-card__description {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+}
+
+.service-card__description.is-expanded {
+  display: block;
+  -webkit-line-clamp: unset;
+  line-clamp: unset;
+  overflow: visible;
+}
+
+/* Text-style button that expands the description */
+.service-card__toggle {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: var(--space-1);
+  min-height: 44px;
+  margin-block: calc(var(--space-2) * -1);
+  padding: var(--space-2) 0;
+  font: inherit;
+  font-weight: 600;
+  color: var(--color-link);
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.service-card__toggle:hover {
+  color: var(--color-link-hover);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.service-card__chevron {
+  transition: transform 0.2s var(--ease);
+}
+
+.service-card__toggle[aria-expanded='true'] .service-card__chevron {
+  transform: rotate(180deg);
+}
+
+@media (min-width: 768px) {
+  .service-card__body {
+    padding: var(--space-5);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .service-card:hover .service-card__image {
+    transform: none;
+  }
+}
