@@ -36,9 +36,11 @@ export const notFound = (req, res, next) => {
 
 /**
  * Global Error-Handling Middleware (4-parameter signature required by Express)
- * Normalizes Mongoose, JWT, and custom errors into safe JSON responses.
+ * Normalizes Mongoose, JWT, body-parser and custom errors into safe JSON responses.
  */
 export const errorHandler = (err, req, res, next) => {
+  const isProduction = process.env.NODE_ENV === 'production';
+
   let statusCode = err.statusCode || (res.statusCode && res.statusCode !== 200 ? res.statusCode : 500);
   let message = err.message || 'Internal Server Error';
 
@@ -74,9 +76,27 @@ export const errorHandler = (err, req, res, next) => {
     message = 'Your session token has expired. Please log in again.';
   }
 
-  // Log server errors in development for easier debugging
-  if (process.env.NODE_ENV !== 'production' && statusCode >= 500) {
-    console.error('[Server Error]:', err);
+  // 5. Request-body problems raised by Express's body parser (never echo parser internals)
+  if (err.type === 'entity.parse.failed') {
+    statusCode = 400;
+    message = 'Malformed JSON in request body';
+  }
+
+  if (err.type === 'entity.too.large') {
+    statusCode = 413;
+    message = 'Request body is too large';
+  }
+
+  // 6. Production: unexpected server errors must not reveal internal details.
+  //    Errors thrown on purpose (ApiError) keep their safe, written messages.
+  if (isProduction && statusCode >= 500 && !err.isOperational) {
+    message = 'Something went wrong on our server. Please try again.';
+  }
+
+  // Always log server errors so they can be diagnosed (hosting logs are private).
+  // In production log only the message, in development log the full error.
+  if (statusCode >= 500) {
+    console.error('[Server Error]:', isProduction ? err.message : err);
   }
 
   res.status(statusCode).json({
