@@ -65,7 +65,7 @@ export default function AIRecommender() {
       );
 
       if (requestNumber !== latestRequest.current) return;
-      setResult({ status: 'done', data, error: '', showCatalogLink: false });
+            setResult({ status: 'done', data, error: '', showCatalogLink: false, goal: trimmed });
     } catch (error) {
       if (requestNumber !== latestRequest.current) return;
 
@@ -154,13 +154,28 @@ export default function AIRecommender() {
               </p>
             ) : (
               <div>
-                {recommendations.map((item) => (
-                  <ServiceCard key={getServiceId(item.service)} service={item.service} headingLevel={3}>
-                    <p>
-                      <strong>Why this fits:</strong> {item.reason}
-                    </p>
-                  </ServiceCard>
-                ))}
+              {recommendations.map((item) => {
+                  const serviceId = getServiceId(item.service);
+
+                  return (
+                    <ServiceCard key={serviceId} service={item.service} headingLevel={3}>
+                      <p>
+                        <strong>Why this fits:</strong> {item.reason}
+                      </p>
+                      {serviceId && (
+                        <p>
+                          <Link
+                            className="btn"
+                            to={`/book/${serviceId}`}
+                            state={{ prefillNotes: `Goal: ${result.goal ?? ''}` }}
+                          >
+                            Book this service
+                          </Link>
+                        </p>
+                      )}
+                    </ServiceCard>
+                  );
+                })}
               </div>
             )}
 
