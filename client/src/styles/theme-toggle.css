@@ -1,0 +1,32 @@
+/* ==============================================================================
+   ThemeToggle styles
+   File Path: client/src/styles/theme-toggle.css
+   ============================================================================== */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  color: var(--color-text);
+  background: transparent;
+  border: 2px solid var(--color-border-strong);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.18s var(--ease), border-color 0.18s var(--ease),
+    color 0.18s var(--ease), transform 0.18s var(--ease);
+}
+
+.theme-toggle:hover {
+  color: var(--color-link);
+  background: var(--color-primary-soft);
+  border-color: var(--color-link);
+  transform: rotate(-12deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle:hover {
+    transform: none;
+  }
+}
