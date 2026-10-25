@@ -51,3 +51,11 @@ export const formatDuration = (minutes) => {
  * while the AI recommendation endpoint sends "id". Returns "" when neither exists.
  */
 export const getServiceId = (service) => service?._id ?? service?.id ?? '';
+
+/**
+ * Build a safe CSS class from a category name: "Strength" -> "category-strength".
+ * Only letters and digits survive, so unexpected data cannot inject odd class names.
+ * Unknown categories simply match no color rule and show the neutral tag style.
+ */
+export const getCategoryClass = (category) =>
+  `category-${String(category ?? '').toLowerCase().replace(/[^a-z0-9]/g, '')}`;
