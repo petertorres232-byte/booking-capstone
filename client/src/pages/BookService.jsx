@@ -1,17 +1,16 @@
 // ==============================================================================
-// APEX PERFORMANCE — BOOK A SERVICE PAGE
+// APEX PERFORMANCE - BOOK A SERVICE PAGE
 // File Path: client/src/pages/BookService.jsx
 // Route: /book/:serviceId   (wrapped in <ProtectedRoute> in App.jsx)
 // ==============================================================================
 
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
+import BookingConfirmation from '../components/BookingConfirmation.jsx';
 import FormField from '../components/FormField.jsx';
 import { api } from '../services/api.js';
 import {
   MAX_NOTES_LENGTH,
-  formatDateTime,
-  formatTimeRange,
   getMinLocalDateTime,
   localInputToIso,
   validateBookingForm
@@ -36,14 +35,14 @@ const getPrefillNotes = (state) => {
 };
 
 export default function BookService() {
-   const { serviceId } = useParams();
+  const { serviceId } = useParams();
   const location = useLocation();
   const isValidId = OBJECT_ID_PATTERN.test(serviceId ?? '');
 
   const [reloadCount, setReloadCount] = useState(0);
   const [result, setResult] = useState({ key: null, service: null, error: '', notFound: false });
 
-    const [values, setValues] = useState(() => ({
+  const [values, setValues] = useState(() => ({
     ...EMPTY_VALUES,
     notes: getPrefillNotes(location.state)
   }));
@@ -189,52 +188,7 @@ export default function BookService() {
 
   // Success screen: shows the server's saved values, not what we typed
   if (confirmedBooking) {
-    const savedStart = confirmedBooking.startTime;
-    const savedDuration = confirmedBooking.durationMinutes ?? service.durationMinutes;
-    const savedPrice = confirmedBooking.priceAtBooking ?? service.price;
-
-    return (
-      <section className="card" style={{ maxWidth: '640px', marginInline: 'auto' }}>
-        <div className="alert alert-success" role="status">
-          Your appointment is booked.
-        </div>
-        <h1>Booking confirmed</h1>
-
-        <dl className="facts">
-          <div>
-            <dt>Service</dt>
-            <dd>{service.name}</dd>
-          </div>
-          <div>
-            <dt>When</dt>
-            <dd>{savedStart ? formatDateTime(savedStart) : 'See your dashboard'}</dd>
-          </div>
-          {savedStart && (
-            <div>
-              <dt>Time</dt>
-              <dd>{formatTimeRange(savedStart, savedDuration)}</dd>
-            </div>
-          )}
-          <div>
-            <dt>Coach</dt>
-            <dd>{service.coachName}</dd>
-          </div>
-          <div>
-            <dt>Price</dt>
-            <dd>{formatPrice(savedPrice)}</dd>
-          </div>
-        </dl>
-
-        <p>
-          <Link className="btn" to="/dashboard">
-            View my appointments
-          </Link>{' '}
-          <Link className="btn btn-secondary" to="/services">
-            Book another service
-          </Link>
-        </p>
-      </section>
-    );
+    return <BookingConfirmation service={service} booking={confirmedBooking} />;
   }
 
   // Booking form

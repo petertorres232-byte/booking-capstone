@@ -1,0 +1,174 @@
+/* ==============================================================================
+   BOOKING CONFIRMATION SCREEN (animated)
+   File Path: client/src/styles/booking-confirmation.css
+   ============================================================================== */
+
+.booking-confirmation.card {
+  max-width: 640px;
+  margin-inline: auto;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Photo with the check badge overlapping its bottom edge */
+.booking-confirmation__header {
+  position: relative;
+  margin-bottom: 40px;
+}
+
+.booking-confirmation__media {
+  aspect-ratio: 16 / 6;
+  background: var(--color-primary-soft);
+  overflow: hidden;
+}
+
+.booking-confirmation__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+}
+
+.booking-confirmation__badge {
+  position: absolute;
+  left: var(--space-5);
+  bottom: -40px;
+  display: grid;
+  place-items: center;
+  width: 80px;
+  height: 80px;
+  color: #ffffff;
+  background: #15803d;
+  border: 4px solid var(--color-surface);
+  border-radius: 50%;
+  animation: confirm-pop 0.55s var(--ease) both;
+}
+
+/* One soft ring that expands and fades */
+.booking-confirmation__badge::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border: 3px solid #22c55e;
+  border-radius: 50%;
+  opacity: 0;
+  animation: confirm-ring 0.9s ease-out 0.35s both;
+}
+
+.booking-confirmation__check {
+  width: 44px;
+  height: 44px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.booking-confirmation__check path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  animation: confirm-draw 0.45s ease-out 0.3s both;
+}
+
+/* Text content rises in after the badge */
+.booking-confirmation__body {
+  padding: var(--space-3) var(--space-4) var(--space-5);
+  animation: confirm-rise 0.5s var(--ease) 0.2s both;
+}
+
+.booking-confirmation__body h1 {
+  margin-top: var(--space-2);
+}
+
+/* Heading is focused programmatically for screen readers; it is not interactive */
+.booking-confirmation__body h1:focus {
+  outline: none;
+}
+
+.booking-confirmation__facts > div {
+  animation: confirm-rise 0.45s var(--ease) both;
+}
+
+.booking-confirmation__facts > div:nth-child(1) {
+  animation-delay: 0.35s;
+}
+
+.booking-confirmation__facts > div:nth-child(2) {
+  animation-delay: 0.42s;
+}
+
+.booking-confirmation__facts > div:nth-child(3) {
+  animation-delay: 0.49s;
+}
+
+.booking-confirmation__facts > div:nth-child(4) {
+  animation-delay: 0.56s;
+}
+
+.booking-confirmation__facts > div:nth-child(5) {
+  animation-delay: 0.63s;
+}
+
+.booking-confirmation__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}
+
+@media (min-width: 768px) {
+  .booking-confirmation__body {
+    padding: var(--space-3) var(--space-5) var(--space-6);
+  }
+}
+
+/* "from" frames only: without animation the element simply shows its final state */
+@keyframes confirm-pop {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes confirm-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
+@keyframes confirm-ring {
+  from {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.7);
+  }
+}
+
+@keyframes confirm-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+/* Reduced motion: show everything immediately */
+@media (prefers-reduced-motion: reduce) {
+  .booking-confirmation__badge,
+  .booking-confirmation__badge::after,
+  .booking-confirmation__check path,
+  .booking-confirmation__body,
+  .booking-confirmation__facts > div {
+    animation: none;
+  }
+}
