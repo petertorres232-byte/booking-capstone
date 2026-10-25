@@ -8,8 +8,32 @@
       name="description"
       content="Apex Performance: book strength coaching, conditioning, mobility and recovery sessions online, with an AI assistant that recommends the right service for your goal."
     />
-    <meta name="theme-color" content="#c2410c" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f1520" media="(prefers-color-scheme: dark)" />
     <title>Apex Performance | Book Coaching &amp; Recovery</title>
+    <script>
+      // Runs before first paint: apply a saved theme (no flash) and, on the home page only,
+      // start downloading the hero photo immediately instead of waiting for the app to load.
+      (function () {
+        try {
+          var theme = window.localStorage.getItem('apex-theme');
+          if (theme === 'light' || theme === 'dark') {
+            document.documentElement.dataset.theme = theme;
+          }
+        } catch (error) {
+          // Storage unavailable: the page follows the operating system theme.
+        }
+
+        if (window.location.pathname === '/') {
+          var hero = document.createElement('link');
+          hero.rel = 'preload';
+          hero.as = 'image';
+          hero.href = '/images/hero.webp';
+          hero.setAttribute('fetchpriority', 'high');
+          document.head.appendChild(hero);
+        }
+      })();
+    </script>
   </head>
   <body>
     <noscript>Apex Performance needs JavaScript enabled to run. Please enable it in your browser settings and reload the page.</noscript>
