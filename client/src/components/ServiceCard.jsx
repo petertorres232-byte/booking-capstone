@@ -9,17 +9,9 @@
 import { useId, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronDown } from 'lucide-react';
+import { getCategoryImage } from '../utils/categoryImages.js';
 import { formatDuration, formatPrice, getCategoryClass, getServiceId } from '../utils/serviceHelpers.js';
 import '../styles/service-card.css';
-
-// One illustration per category (files live in client/public/images)
-const CATEGORY_IMAGES = {
-  strength: '/images/strength.webp',
-  cardio: '/images/cardio.webp',
-  recovery: '/images/recovery.webp',
-  mobility: '/images/mobility.webp',
-  assessment: '/images/assessment.webp',
-};
 
 // Descriptions longer than this are trimmed to 3 lines with a Show more button
 const LONG_DESCRIPTION_LENGTH = 120;
@@ -39,7 +31,7 @@ export default function ServiceCard({ service, headingLevel = 2, children }) {
   const Heading = headingLevel === 3 ? 'h3' : 'h2';
   const description = typeof service.description === 'string' ? service.description : '';
   const isLong = description.length > LONG_DESCRIPTION_LENGTH;
-  const image = CATEGORY_IMAGES[String(service.category || '').toLowerCase()] ?? null;
+  const image = getCategoryImage(service.category);
 
   const categoryTag = (
     <span className={`category-tag ${getCategoryClass(service.category)}`}>{service.category || 'General'}</span>
