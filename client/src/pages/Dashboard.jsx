@@ -4,8 +4,9 @@
 // Route: /dashboard   (wrapped in <ProtectedRoute> in App.jsx)
 // ==============================================================================
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import BookingActions from '../components/BookingActions.jsx';
 import BookingCard from '../components/BookingCard.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
 import { api } from '../services/api.js';
@@ -43,8 +44,10 @@ export default function Dashboard() {
   const { user } = useAuth();
   const [reloadCount, setReloadCount] = useState(0);
   const [result, setResult] = useState({ key: null, bookings: [], error: '', loadedAt: 0 });
+  const [notice, setNotice] = useState('');
+  const noticeRef = useRef(null);
 
-  // Identifies one specific request; a retry creates a new key
+  // Identifies one specific request; every reload creates a new key
   const requestKey = `bookings#${reloadCount}`;
 
   useEffect(() => {
@@ -73,9 +76,25 @@ export default function Dashboard() {
     };
   }, [requestKey]);
 
-  const isCurrent = result.key === requestKey;
-  const isLoading = !isCurrent;
+  // After an action, move keyboard focus to the status message
+  useEffect(() => {
+    if (notice) {
+      noticeRef.current?.focus();
+    }
+  }, [notice]);
+
+  const handleChanged = (message) => {
+    setNotice(message);
+    setReloadCount((count) => count + 1);
+  };
+
   const handleRetry = () => setReloadCount((count) => count + 1);
+
+  const isCurrent = result.key === requestKey;
+
+  // Spinner only for the first load, or when retrying after an error.
+  // During a refresh after an action, the previous list stays visible.
+  const isLoading = result.key === null || (!isCurrent && Boolean(result.error));
 
   if (isLoading) {
     return (
@@ -108,6 +127,12 @@ export default function Dashboard() {
         </Link>
       </div>
 
+      {notice && (
+        <div className="alert alert-success" role="status" tabIndex={-1} ref={noticeRef}>
+          {notice}
+        </div>
+      )}
+
       <section aria-labelledby="upcoming-heading">
         <h2 id="upcoming-heading">Upcoming appointments ({upcoming.length})</h2>
 
@@ -119,7 +144,11 @@ export default function Dashboard() {
             </Link>
           </div>
         ) : (
-          upcoming.map((booking) => <BookingCard key={booking._id} booking={booking} />)
+          upcoming.map((booking) => (
+            <BookingCard key={booking._id} booking={booking}>
+              <BookingActions booking={booking} onChanged={handleChanged} />
+            </BookingCard>
+          ))
         )}
       </section>
 
