@@ -1,8 +1,8 @@
 // ==============================================================================
 // APEX PERFORMANCE — APP ROOT (PROVIDERS + ROUTES)
 // File Path: client/src/App.jsx
-// Remaining placeholders (Home, Services, Dashboard) are replaced by real
-// files in client/src/pages/ during Steps 30-35.
+// Remaining placeholders (Home, Dashboard) are replaced by real files in
+// client/src/pages/ during Steps 32-35.
 // ==============================================================================
 
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
@@ -11,6 +11,8 @@ import Layout from './components/Layout.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
+import Services from './pages/Services.jsx';
+import ServiceDetail from './pages/ServiceDetail.jsx';
 
 function HomePlaceholder() {
   return (
@@ -20,15 +22,6 @@ function HomePlaceholder() {
       <Link className="btn" to="/services">
         Browse services
       </Link>
-    </section>
-  );
-}
-
-function ServicesPlaceholder() {
-  return (
-    <section className="card">
-      <h1>Services</h1>
-      <p className="text-muted">The live service catalog will load here from the API.</p>
     </section>
   );
 }
@@ -61,7 +54,8 @@ export default function App() {
         <Routes>
           <Route element={<Layout />}>
             <Route index element={<HomePlaceholder />} />
-            <Route path="services" element={<ServicesPlaceholder />} />
+            <Route path="services" element={<Services />} />
+            <Route path="services/:id" element={<ServiceDetail />} />
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
             <Route
