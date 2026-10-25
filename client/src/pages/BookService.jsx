@@ -5,7 +5,7 @@
 // ==============================================================================
 
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import FormField from '../components/FormField.jsx';
 import { api } from '../services/api.js';
 import {
@@ -23,14 +23,30 @@ const OBJECT_ID_PATTERN = /^[a-f0-9]{24}$/i;
 
 const EMPTY_VALUES = { startTime: '', notes: '' };
 
+/**
+ * Notes passed from the previous page (for example the AI finder) are only a
+ * convenience. Treat them as untrusted: must be text, trimmed, and capped.
+ */
+const getPrefillNotes = (state) => {
+  const raw = state?.prefillNotes;
+  if (typeof raw !== 'string') {
+    return '';
+  }
+  return raw.trim().slice(0, MAX_NOTES_LENGTH);
+};
+
 export default function BookService() {
-  const { serviceId } = useParams();
+   const { serviceId } = useParams();
+  const location = useLocation();
   const isValidId = OBJECT_ID_PATTERN.test(serviceId ?? '');
 
   const [reloadCount, setReloadCount] = useState(0);
   const [result, setResult] = useState({ key: null, service: null, error: '', notFound: false });
 
-  const [values, setValues] = useState(EMPTY_VALUES);
+    const [values, setValues] = useState(() => ({
+    ...EMPTY_VALUES,
+    notes: getPrefillNotes(location.state)
+  }));
   const [errors, setErrors] = useState({});
   const [submitError, setSubmitError] = useState('');
   const [submitting, setSubmitting] = useState(false);
