@@ -1,0 +1,10 @@
+/* ==============================================================================
+   LAYOUT STABILITY
+   File Path: client/src/styles/layout-stability.css
+   The page body is at least one screen tall, so the footer always starts below
+   the first screen. When data loads and the page grows, the footer moves
+   off-screen only, which avoids a visible layout shift.
+   ============================================================================== */
+#root > main {
+  min-height: 100vh;
+}
