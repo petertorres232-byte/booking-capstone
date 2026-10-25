@@ -1,13 +1,15 @@
 // ==============================================================================
 // APEX PERFORMANCE — APP ROOT (PROVIDERS + ROUTES)
 // File Path: client/src/App.jsx
-// The only remaining placeholder is Home, replaced by a real page later.
+// All pages live in client/src/pages/. Protected routes are wrapped in
+// <ProtectedRoute> (UX only; the server enforces real access control).
 // ==============================================================================
 
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext.jsx';
 import Layout from './components/Layout.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
+import Home from './pages/Home.jsx';
 import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
 import Services from './pages/Services.jsx';
@@ -15,19 +17,7 @@ import ServiceDetail from './pages/ServiceDetail.jsx';
 import BookService from './pages/BookService.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 
-function HomePlaceholder() {
-  return (
-    <section className="card">
-      <h1>Apex Performance</h1>
-      <p className="text-muted">The real home page arrives in a later step.</p>
-      <Link className="btn" to="/services">
-        Browse services
-      </Link>
-    </section>
-  );
-}
-
-function NotFoundPlaceholder() {
+function NotFound() {
   return (
     <section className="card text-center">
       <h1>Page not found</h1>
@@ -45,7 +35,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route element={<Layout />}>
-            <Route index element={<HomePlaceholder />} />
+            <Route index element={<Home />} />
             <Route path="services" element={<Services />} />
             <Route path="services/:id" element={<ServiceDetail />} />
             <Route path="login" element={<Login />} />
@@ -66,7 +56,7 @@ export default function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="*" element={<NotFoundPlaceholder />} />
+            <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
       </BrowserRouter>
