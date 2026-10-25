@@ -6,6 +6,7 @@
 
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import AIRecommender from '../components/AIRecommender.jsx';
 import ServiceCard from '../components/ServiceCard.jsx';
 import { api } from '../services/api.js';
 import { getServiceId } from '../utils/serviceHelpers.js';
@@ -75,6 +76,10 @@ export default function Services() {
           browse everything.
         </p>
       </div>
+
+            
+
+      <AIRecommender />
 
       <div className="filter-bar" role="group" aria-label="Filter services by category">
         <button
