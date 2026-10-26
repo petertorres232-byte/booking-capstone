@@ -32,6 +32,14 @@ const formatShortTime = (value) => {
     : date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
 };
 
+// "October 2026". Returns an empty string when the date is missing or invalid.
+const formatMemberSince = (value) => {
+  const date = new Date(value);
+  return Number.isNaN(date.getTime())
+    ? ''
+    : date.toLocaleDateString(undefined, { month: 'long', year: 'numeric' });
+};
+
 /**
  * Split bookings into upcoming and history lists.
  * Upcoming = confirmed and not yet finished (soonest first).
@@ -136,6 +144,7 @@ export default function Dashboard() {
   const nextBooking = upcoming[0] ?? null;
   const pastSessions = history.filter((booking) => booking.status !== 'cancelled').length;
   const firstName = user?.name ? user.name.split(' ')[0] : '';
+  const memberSince = formatMemberSince(user?.createdAt);
 
   return (
     <div>
@@ -221,6 +230,27 @@ export default function Dashboard() {
             )}
           </div>
         </details>
+      </section>
+
+      <section className="dashboard-section" aria-labelledby="profile-heading">
+        <h2 id="profile-heading">Your profile</h2>
+        <div className="card">
+          <dl className="facts">
+            <div>
+              <dt>Name</dt>
+              <dd style={{ overflowWrap: 'anywhere' }}>{user?.name ?? '—'}</dd>
+            </div>
+            <div>
+              <dt>Email</dt>
+              {/* overflowWrap keeps a very long address inside the card on a 375px phone */}
+              <dd style={{ overflowWrap: 'anywhere' }}>{user?.email ?? '—'}</dd>
+            </div>
+            <div>
+              <dt>Member since</dt>
+              <dd>{memberSince || '—'}</dd>
+            </div>
+          </dl>
+        </div>
       </section>
     </div>
   );
