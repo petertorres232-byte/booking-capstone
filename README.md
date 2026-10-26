@@ -10,6 +10,7 @@ Apex Performance is built for busy professionals, amateur athletes, and beginner
 | **Live API** | https://apex-performance-xqfe.onrender.com/api (health check: `/api/health`) |
 | **Repository** | https://github.com/petertorres232-byte/booking-capstone |
 | **Author** | Peter Torres |
+| **SDLC report** | [Formal documentation report (PDF)](docs/Apex-Performance-SDLC-Report.pdf) |
 
 > **Note on the free hosting tier:** the API runs on Render's free plan and sleeps after 15 minutes without traffic. The first request after a quiet period can take around a minute to wake it. Later requests are fast.
 
@@ -150,7 +151,7 @@ USER 1 ----< BOOKING >---- 1 SERVICE
 booking-capstone/
 ├── README.md
 ├── .gitignore
-├── docs/                       image credits and screenshots
+├── docs/                       SDLC report (PDF), image credits, screenshots
 ├── client/                     React + Vite frontend
 │   ├── public/                 favicon, images, robots.txt
 │   ├── vercel.json             SPA rewrite and security headers
@@ -287,6 +288,8 @@ Base URL: `/api`. All bodies are JSON. Errors use `{ "status": "error", "statusC
 
 To reproduce: run the smoke test with `--base=https://apex-performance-xqfe.onrender.com/api`, or follow the local setup above. Run Lighthouse against `npm run build` plus `npm run preview`, not the dev server, because the dev server is unminified and gives misleading scores.
 
+Full test evidence, including the defects found by testing and how each was fixed, is in section 9 of the [SDLC report](docs/Apex-Performance-SDLC-Report.pdf).
+
 ## Deployment
 
 | Part | Platform | Configuration |
@@ -318,10 +321,10 @@ AI was used as a development assistant under my direction, and I tested every st
 - **Planning and design:** Google Gemini and Claude helped brainstorm the domain, draft user stories and acceptance criteria, design the three-tier architecture and ASCII wireframes, and produce the database contract and seed plan.
 - **Implementation:** Claude acted as a step-by-step mentor and pair programmer, working from a master prompt that required one file per step, complete code, negative tests, a security check, and a Git checkpoint with every step. It helped write the backend, the React client, the grounded AI service, the design system, and the deployment configuration.
 - **Debugging and hardening:** AI helped diagnose issues (CORS during preview, layout shift, theme flash, environment variable mix-ups) and run security and quality audits.
-- **Documentation:** AI helped draft this README and the formal report. Every step has a log entry in the SDLC report.
+- **Documentation:** AI helped draft this README and the formal report. Every step has a log entry in the [SDLC report](docs/Apex-Performance-SDLC-Report.pdf).
 - **In the product:** Google Gemini powers the Smart Training Matchmaker described above. It is grounded in the live database and its output is validated before display.
 
-**My responsibility:** I ran and verified each step, reviewed and understood the code, made the final technical decisions (for example soft-cancelling bookings, keeping the AI key server-side, and accepting the free-tier limitations listed above), and tested the deployed app. The complete AI usage log is in the SDLC documentation report.
+**My responsibility:** I ran and verified each step, reviewed and understood the code, made the final technical decisions (for example soft-cancelling bookings, keeping the AI key server-side, and accepting the free-tier limitations listed above), and tested the deployed app. The complete AI usage log is in the [SDLC documentation report](docs/Apex-Performance-SDLC-Report.pdf).
 
 ## Credits
 
